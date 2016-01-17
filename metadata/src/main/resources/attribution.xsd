@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright 2016 Johannes Donath <johannesd@torchmind.com>
+  ~ and other copyright owners as documented in the project's IP log.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.torchmind.com/schema/2016/attribution">
+        <xs:element name="attribution" type="attribution" />
+
+        <!-- Complex Types -->
+        <xs:complexType name="attribution">
+                <xs:complexContent>
+                        <xs:extension base="artifact">
+                                <xs:choice>
+                                        <xs:element name="dependencies" type="dependencies" />
+                                        <xs:element name="plugins" type="plugins" />
+                                </xs:choice>
+                        </xs:extension>
+                </xs:complexContent>
+        </xs:complexType>
+
+        <xs:complexType name="dependencies">
+                <xs:choice>
+                        <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="artifact" />
+                </xs:choice>
+        </xs:complexType>
+        <xs:complexType name="plugins">
+                <xs:choice>
+                        <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="artifact" />
+                </xs:choice>
+        </xs:complexType>
+
+        <xs:complexType name="artifact">
+                <xs:choice>
+                        <xs:element name="groupId" minOccurs="1" maxOccurs="1" type="groupId" />
+                        <xs:element name="artifactId" minOccurs="1" maxOccurs="1" type="artifactId" />
+                        <xs:element name="version" minOccurs="1" maxOccurs="1" type="xs:string" /> <!-- No further validation possible as there are no conventions -->
+                        <xs:element name="url" minOccurs="0" maxOccurs="1" type="xs:anyURI" />
+                        <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
+                        <xs:element name="description" minOccurs="0" maxOccurs="1" type="xs:string" />
+
+                        <xs:element name="licenses" minOccurs="0" maxOccurs="1" type="licenseList" />
+                        <xs:element name="developers" minOccurs="0" maxOccurs="1" type="developerList" />
+                        <xs:element name="contributors" minOccurs="0" maxOccurs="1" type="contributorList" />
+                </xs:choice>
+        </xs:complexType>
+
+        <xs:complexType name="licenseList">
+                <xs:sequence>
+                        <xs:element name="license" minOccurs="0" maxOccurs="unbounded" type="license" />
+                </xs:sequence>
+        </xs:complexType>
+        <xs:complexType name="license">
+                <xs:choice>
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string" />
+                        <xs:element name="url" minOccurs="0" maxOccurs="1" type="xs:anyURI" />
+                </xs:choice>
+        </xs:complexType>
+
+        <xs:complexType name="developerList">
+                <xs:sequence>
+                        <xs:element name="developer" minOccurs="0" maxOccurs="unbounded" type="developer" />
+                </xs:sequence>
+        </xs:complexType>
+        <xs:complexType name="contributorList">
+                <xs:sequence>
+                        <xs:element name="contributor" minOccurs="0" maxOccurs="unbounded" type="developer" />
+                </xs:sequence>
+        </xs:complexType>
+        <xs:complexType name="developer">
+                <xs:choice>
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string" />
+                        <xs:element name="email" minOccurs="0" maxOccurs="1" type="emailAddress" />
+                        <xs:element name="url" minOccurs="0" maxOccurs="1" type="xs:anyURI" />
+
+                        <xs:element name="organization" minOccurs="0" maxOccurs="1" type="organization" />
+                        <xs:element name="roles" minOccurs="0" maxOccurs="1" type="roleList" />
+                </xs:choice>
+        </xs:complexType>
+
+        <xs:complexType name="organization">
+                <xs:choice>
+                        <xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string" />
+                        <xs:element name="url" minOccurs="0" maxOccurs="0" type="xs:anyURI" />
+                </xs:choice>
+        </xs:complexType>
+        <xs:complexType name="roleList">
+                <xs:choice>
+                        <xs:element name="role" minOccurs="0" maxOccurs="unbounded" type="xs:string" />
+                </xs:choice>
+        </xs:complexType>
+
+        <!-- Value Validation Types -->
+        <xs:simpleType name="groupId">
+                <xs:restriction base="xs:string">
+                        <xs:pattern value="[A-Za-z0-9_\-.]+" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="artifactId">
+                <xs:restriction base="xs:string">
+                        <xs:pattern value="[A-Za-z0-9_\-.]+" />
+                </xs:restriction>
+        </xs:simpleType>
+
+        <xs:simpleType name="emailAddress">
+                <xs:restriction base="xs:string">
+                        <xs:pattern value="[^@]+@[^\.]+\..+" />
+                </xs:restriction>
+        </xs:simpleType>
+</xs:schema>
